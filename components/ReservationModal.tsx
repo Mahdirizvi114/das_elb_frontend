@@ -35,19 +35,48 @@ export default function ReservationModal({ isOpen, onClose }: ReservationModalPr
         e.preventDefault();
         setIsSubmitting(true);
 
-        // Simulate API call
-        console.log("Reservation Data:", formData);
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        try {
+            // Split datetime string into date and time for backend
+            const dateObj = new Date(formData.time);
+            const date = dateObj.toISOString().split('T')[0];
+            const time = dateObj.toTimeString().split(' ')[0].substring(0, 5); // HH:MM
 
-        setIsSubmitting(false);
-        setIsSuccess(true);
+            const response = await fetch("https://das-elb-backend.onrender.com/api/reservations/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    name: formData.name,
+                    email: formData.email,
+                    contact: formData.contact,
+                    guests: parseInt(formData.guests),
+                    date: date,
+                    time: time,
+                }),
+            });
 
-        // Close after showing success
-        setTimeout(() => {
-            onClose();
-            setIsSuccess(false);
-            setFormData({ name: "", email: "", contact: "", time: "", guests: "2" });
-        }, 2000);
+            if (!response.ok) {
+                throw new Error("Failed to submit reservation");
+            }
+
+            const data = await response.json();
+            console.log("Success:", data);
+
+            setIsSubmitting(false);
+            setIsSuccess(true);
+
+            // Close after showing success
+            setTimeout(() => {
+                onClose();
+                setIsSuccess(false);
+                setFormData({ name: "", email: "", contact: "", time: "", guests: "2" });
+            }, 2000);
+        } catch (error) {
+            console.error("Error submitting reservation:", error);
+            setIsSubmitting(false);
+            alert("Something went wrong. Please try again.");
+        }
     };
 
     if (!isOpen) return null;
