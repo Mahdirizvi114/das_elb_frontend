@@ -22,8 +22,8 @@ export default function MenuGallery() {
                         key={cat}
                         onClick={() => setActiveCategory(cat)}
                         className={`px-6 py-2 rounded-full border border-gold-400/30 transition-all duration-300 ${activeCategory === cat
-                                ? "bg-gold-400 text-black font-semibold shadow-[0_0_15px_rgba(212,175,55,0.4)]"
-                                : "bg-transparent text-gold-100 hover:bg-gold-400/10"
+                            ? "bg-gold-400 text-black font-semibold shadow-[0_0_15px_rgba(212,175,55,0.4)]"
+                            : "bg-transparent text-gold-100 hover:bg-gold-400/10"
                             }`}
                     >
                         {cat}
@@ -31,8 +31,8 @@ export default function MenuGallery() {
                 ))}
             </div>
 
-            {/* Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Grid / Slider */}
+            <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-8 -mx-4 px-4 md:mx-0 md:px-0 md:pb-0 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-8 scrollbar-hide">
                 {filteredItems.map((item) => (
                     <MenuCard key={item.id} item={item} />
                 ))}
@@ -43,7 +43,7 @@ export default function MenuGallery() {
 
 function MenuCard({ item }: { item: MenuItem }) {
     return (
-        <div className="group bg-zinc-900/50 rounded-2xl overflow-hidden border border-white/5 hover:border-gold-400/30 transition-all duration-300 hover:-translate-y-1">
+        <div className="min-w-[85vw] snap-center md:min-w-0 group bg-zinc-900/50 rounded-2xl overflow-hidden border border-white/5 hover:border-gold-400/30 transition-all duration-300 hover:-translate-y-1">
             {/* Image Area */}
             <div className="relative h-64 w-full bg-zinc-800 overflow-hidden">
                 {item.image ? (
